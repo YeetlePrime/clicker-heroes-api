@@ -4,6 +4,10 @@ info:
   description: Unofficial documentation for the backend-API of Clicker Heroes
   version: 0.0.1
 
+tags:
+  - name: clans
+    description: Endpoints related to clans
+
 servers:
   - url: https://guilds.clickerheroes.com
     description: Backend API-Server for Clicker Heroes
@@ -12,6 +16,7 @@ paths:
   /clans/getGuildInfo.php:
     get:
       summary: Retrieves information for the clan of a logged in user
+      tags: [clans]
       parameters:
         - in: query
           name: uid
@@ -37,6 +42,7 @@ paths:
   /clans/findGuild.php:
     get:
       summary: Returns information for the clan.
+      tags: [clans]
       parameters:
         - $ref: '#/components/parameters/UnusedIdParam'
         - $ref: '#/components/parameters/UnusedPasswordParam'
@@ -136,7 +142,7 @@ components:
           type: string
           example: "012345678901234567890123456789"
         memberUids:
-          $ref: '#/components/schemas/MemberUidsMap'
+          $ref: '#/components/schemas/MemberUids'
         currentRaidLevel:
           type: number
           example: 42
