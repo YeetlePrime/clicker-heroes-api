@@ -1,0 +1,190 @@
+openapi: 3.0.4
+info:
+  title: Unofficial Clicker Heroes API
+  description: Unofficial documentation for the backend-API of Clicker Heroes
+  version: 0.0.1
+
+servers:
+  - url: https://guilds.clickerheroes.com
+    description: Backend API-Server for Clicker Heroes
+
+paths:
+  /clans/getGuildInfo.php:
+    get:
+      summary: Retrieves information for the clan of a logged in user
+      parameters:
+        - in: query
+          name: uid
+          schema:
+            type: string
+          required: true
+          description: The id of the user
+        - in: query
+          name: passwordHash
+          schema:
+            type: string
+          required: true
+          description: The password hash of the user
+      responses:
+        "200": # status code
+          description: The Reponse-Object containing information of the clan
+          content:
+            text/html:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ClanResponse'
+                  - $ref: '#/components/schemas/ErrorResponse'
+  /clans/findGuild.php:
+    get:
+      summary: Returns information for the clan.
+      parameters:
+        - $ref: '#/components/parameters/UnusedIdParam'
+        - $ref: '#/components/parameters/UnusedPasswordParam'
+        - $ref: '#/components/parameters/UnusedHighestZoneParam'
+        - in: query
+          name: guildName
+          schema:
+            type: string
+          description: The name of the clan the info should be retrieved for. Returns a random clan if nothing is provided.
+      responses:
+        "200": # status code
+          description: A JSON array of user names
+          content:
+            text/html:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ClanResponse'
+                  - $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  parameters:
+    UnusedIdParam:
+      in: query
+      name: uid
+      required: true
+      schema:
+        type: string
+        example: ignored
+      description: The unique identifier for a user - can be anything and is ignored by the backend
+    UnusedPasswordParam:
+      in: query
+      name: passwordHash
+      required: true
+      schema:
+        type: string
+        example: ignored
+      description: The hashed password for a user - can be anything and is ignored by the backend
+    UnusedHighestZoneParam:
+      in: query
+      name: highestZoneReached
+      required: true
+      schema:
+        type: number
+        example: 0
+      description: The hightest zone the user reached - can be anything and is ignored by the backend
+
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - reason
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        reason:
+          type: string
+          description: "Reason why the operation failed"
+      example:
+        success: false
+        reason: "Password mismatch"
+
+    ClanResponse:
+      type: object
+      required:
+        - success
+        - reason
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        result:
+          type: object
+          required:
+            - guild
+            - guildMembers
+          properties:
+            guild:
+              $ref: '#/components/schemas/ClanInfo'
+            guildMembers:
+              $ref: '#/components/schemas/ClanMembers'
+          description: "Info on the clan"
+
+    ClanInfo:
+      type: object
+      required:
+        - name
+        - guildMasterUid
+        - memberUids
+        - currentRaidLevel
+      properties:
+        name:
+          type: string
+          example: "Example-Clan"
+        guildMasterUid:
+          type: string
+          example: "012345678901234567890123456789"
+        memberUids:
+          $ref: '#/components/schemas/MemberUidsMap'
+        currentRaidLevel:
+          type: number
+          example: 42
+
+    MemberUids:
+      type: object
+      additionalProperties:
+        type: string
+        enum: ["request", "member"]
+      description: Map of member uids to either "request" or "member".
+      example:
+        "012345678901234567890123456789": "member"
+        "111111111122222222223333333333": "member"
+        "999999999999999999999999999999": "request"
+
+
+    ClanMembers:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/ClanMember'
+      example:
+        "0":
+          uid: "012345678901234567890123456789"
+
+    ClanMember:
+      type: object
+      properties:
+        uid:
+          $ref: '#/components/schemas/Uid'
+        highestZone:
+          $ref: '#/components/schemas/HighestZone'
+        nickname:
+          type: string
+          example: "Bert"
+        chosenClass:
+          type: ["string"]
+          enum: ["0", "1", "2"]
+          nullable: true
+          description: The chosen class of the member. Can be "0", "1", "2", or null if no class is chosen."
+          example: "1"
+
+    Uid:
+      type: string
+      description: Unique identifier
+      example: "111112222233333444445555566666"
+
+    HighestZone:
+      type: string
+      description: The highest Zone reached by the member
+      example: "2561"
+
