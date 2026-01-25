@@ -158,7 +158,6 @@ components:
         "111111111122222222223333333333": "member"
         "999999999999999999999999999999": "request"
 
-
     ClanMembers:
       type: object
       additionalProperties:
@@ -166,6 +165,28 @@ components:
       example:
         "0":
           uid: "012345678901234567890123456789"
+          highestZone: "2126"
+          nichname: "Leader of Clans"
+          chosenClass: "2"
+          classLevel: "12"
+          lastRewardTimestamp: "1610841600"
+          lastBonusRewardTimestamp: "1610841600"
+        "1":
+          uid: "111111111122222222223333333333"
+          highestZone: "201"
+          nichname: "A Member :)"
+          chosenClass: "1"
+          classLevel: "2"
+          lastRewardTimestamp: null
+          lastBonusRewardTimestamp: null
+        "2":
+          uid: "999999999999999999999999999999"
+          highestZone: "341"
+          nichname: "Requesti"
+          chosenClass: null
+          classLevel: null
+          lastRewardTimestamp: null
+          lastBonusRewardTimestamp: null
 
     ClanMember:
       type: object
@@ -178,11 +199,19 @@ components:
           type: string
           example: "Bert"
         chosenClass:
-          type: ["string"]
-          enum: ["0", "1", "2"]
+          $ref: '#/components/schemas/ChosenClass'
+        classLevel:
+          type: string
           nullable: true
-          description: The chosen class of the member. Can be "0", "1", "2", or null if no class is chosen."
-          example: "1"
+          example: "10"
+        lastRewardTimestamp:
+          type: string
+          nullable: true
+          example: "1610841600"
+        lastBonusRewardTimestamp:
+          type: string
+          nullable: true
+          example: "1610841600"
 
     Uid:
       type: string
@@ -194,3 +223,9 @@ components:
       description: The highest Zone reached by the member
       example: "2561"
 
+    ChosenClass:
+      type: string
+      enum: ["0", "1", "2"]
+      nullable: true
+      description: The chosen class of the member. Can be "0", "1", "2", or null if no class is chosen."
+      example: 1
