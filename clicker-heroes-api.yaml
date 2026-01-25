@@ -6,7 +6,9 @@ info:
 
 tags:
   - name: clans
-    description: Endpoints related to clans
+    description: Endpoints for retrieving information for clans
+  - name: messages
+    description: Endpoints for interaction with clan-chat messages
 
 servers:
   - url: https://guilds.clickerheroes.com
@@ -54,12 +56,34 @@ paths:
           description: The name of the clan the info should be retrieved for. Returns a random clan if nothing is provided.
       responses:
         "200": # status code
-          description: A JSON array of user names
           content:
             text/html:
               schema:
                 oneOf:
                   - $ref: '#/components/schemas/ClanResponse'
+                  - $ref: '#/components/schemas/ErrorResponse'
+
+  /clans/guildMessageMonitor.php:
+    get:
+      summary: Retrieves the human-readable form of a clan-chat.
+      description: > 
+        This can be called for any clan.
+        Login is not required.
+        The user in bold is the leader of the clan.
+      tags: [messages]
+      parameters:
+        - in: query
+          name: guildName
+          schema:
+            type: string
+          description: The name of the clan the messages should be retrieved for.
+      responses:
+        "200": # status code
+          content:
+            text/html:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/MessageMonitorResponse'
                   - $ref: '#/components/schemas/ErrorResponse'
 
 components:
@@ -126,6 +150,14 @@ components:
             guildMembers:
               $ref: '#/components/schemas/ClanMembers'
           description: "Info on the clan"
+
+    MessageMonitorResponse:
+      type: string
+      description: The messages of a clan in human-readable form. The user in bold is the leader of the clan.
+      example: >
+        <b>Member1</b>@10 years ago: Hey guys:)<br>
+        Member2@10 years ago: Yoooo<br>
+        Member3@9 years ago: Is anyone still here?<br>
 
     ClanInfo:
       type: object
