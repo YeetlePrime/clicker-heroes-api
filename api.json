@@ -1,0 +1,23 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "Unofficial Clicker Heroes API",
+    "description": "An unofficial documentation for the backend-API of the game Clicker Heroes.",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "https://guilds.clickerheroes.com",
+      "description": "Backend API-Server for Clicker Heroes."
+    }
+  ],
+  "paths": {
+    "/clans/getUserInfo.php": {
+      "get": {
+        "summary": {
+          Returns information for a specific user.
+        }
+      }
+    }
+  }
+}
