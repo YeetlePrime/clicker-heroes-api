@@ -1,0 +1,4 @@
+type: string
+description: The highest Zone reached by the member
+pattern: '^\d+$'
+example: "2561"

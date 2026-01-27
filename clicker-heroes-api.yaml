@@ -18,82 +18,43 @@ servers:
 
 paths:
   /clans/findGuild.php:
-    post:
-      summary: Get information for a clan
-      description: > 
-        Retrieves the information for a specific clan.
-        Login is not required.
-        If no clan name is provided, the information for a random clan is returned.
-      tags: [unauthorized]
-      parameters:
-        - $ref: '#/components/parameters/UnusedIdParam'
-        - $ref: '#/components/parameters/UnusedPasswordParam'
-        - $ref: '#/components/parameters/UnusedHighestZoneParam'
-        - in: query
-          name: guildName
-          schema:
-            type: string
-          description: The name of the clan the info should be retrieved for. Returns a random clan if nothing is provided.
-      responses:
-        "200": # status code
-          content:
-            text/html:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/ClanResponse'
-                  - $ref: '#/components/schemas/ErrorResponse'
+    $ref: './paths/findGuild.yaml'
 
   /clans/getGuildInfo.php:
     post:
       summary: Retrieves information for the clan of a logged in user
       tags: [clan-management]
       parameters:
-        - $ref: '#/components/parameters/IdParam'
-        - $ref: '#/components/parameters/PasswordParam'
+        - $ref: './params/Id.yaml'
+        - $ref: './params/Password.yaml'
       responses:
-        "200": # status code
+        "200":
           description: The Reponse-Object containing information of the clan
           content:
             text/html:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/ClanResponse'
-                  - $ref: '#/components/schemas/ErrorResponse'
+                  - $ref: './responses/Clan.yaml'
+                  - $ref: './responses/Error.yaml'
 
   /clans/createGuild.php:
-    post:
-      summary: Create a new clan
-      description: >
-        Creates a new clan that the player will be the leader of.
-        Does not work if the clan name already exists or if the player is alredy in a clan.
-      tags: [clan-management]
-      parameters:
-        - $ref: '#/components/parameters/IdParam'
-        - $ref: '#/components/parameters/PasswordParam'
-        - in: query
-          name: guildName
-          required: true
-          schema:
-            type: string
-          description: The name of the clan that should be created
-
+    $ref: './paths/createGuild.yaml'
   /clans/disbandGuild.php:
-    post:
+    delete:
       summary: Disband an existing clan
       description: >
         Disband a clan that the user is the leader of.
         Does not work if there are other members than just the leader in the clan.
       tags: [clan-management]
       parameters:
-        - $ref: '#/components/parameters/IdParam'
-        - $ref: '#/components/parameters/PasswordParam'
+        - $ref: './params/Id.yaml'
+        - $ref: './params/Password.yaml.yaml'
         - in: query
           name: guildName
           required: true
           schema:
             type: string
           description: The name of the clan that should be disbanded
-
 
   /clans/kickGuildMember.php:
     post:
@@ -108,7 +69,7 @@ paths:
           schema:
             type: string
           description: The uid of the clan leader
-        - $ref: '#/components/parameters/PasswordParam'
+        - $ref: './params/Password.yaml'
         - in: query
           name: guildName
           required: true
@@ -122,219 +83,5 @@ paths:
             type: string
           description: Unique identifier of the member that should get kicked
 
-
   /clans/guildMessageMonitor.php:
-    post:
-      summary: Retrieves the human-readable form of a clan-chat.
-      description: > 
-        This can be called for any clan.
-        Login is not required.
-        The user in bold is the leader of the clan.
-      tags: [messages]
-      parameters:
-        - in: query
-          name: guildName
-          schema:
-            type: string
-          description: The name of the clan the messages should be retrieved for.
-      responses:
-        "200": # status code
-          content:
-            text/html:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/MessageMonitorResponse'
-                  - $ref: '#/components/schemas/ErrorResponse'
-
-components:
-  parameters:
-    IdParam:
-      in: query
-      name: uid
-      required: true
-      schema:
-        type: string
-      description: The unique identifier for a user
-    PasswordParam:
-      in: query
-      name: passwordHash
-      required: true
-      schema:
-        type: string
-      description: The password for the user
-    UnusedIdParam:
-      in: query
-      name: uid
-      required: true
-      schema:
-        type: string
-        example: ignored
-      description: The unique identifier for a user - can be anything and is ignored by the backend
-    UnusedPasswordParam:
-      in: query
-      name: passwordHash
-      required: true
-      schema:
-        type: string
-        example: ignored
-      description: The hashed password for a user - can be anything and is ignored by the backend
-    UnusedHighestZoneParam:
-      in: query
-      name: highestZoneReached
-      required: true
-      schema:
-        type: number
-        example: 0
-      description: The hightest zone the user reached - can be anything and is ignored by the backend
-
-  schemas:
-    ErrorResponse:
-      type: object
-      required:
-        - success
-        - reason
-      properties:
-        success:
-          type: boolean
-          enum: [false]
-        reason:
-          type: string
-          description: "Reason why the operation failed"
-      example:
-        success: false
-        reason: "Password mismatch"
-
-    ClanResponse:
-      type: object
-      required:
-        - success
-        - reason
-      properties:
-        success:
-          type: boolean
-          enum: [true]
-        result:
-          type: object
-          required:
-            - guild
-            - guildMembers
-          properties:
-            guild:
-              $ref: '#/components/schemas/ClanInfo'
-            guildMembers:
-              $ref: '#/components/schemas/ClanMembers'
-          description: "Info on the clan"
-
-    MessageMonitorResponse:
-      type: string
-      description: The messages of a clan in human-readable form. The user in bold is the leader of the clan.
-      example: >
-        <b>Member1</b>@10 years ago: Hey guys:)<br>
-        Member2@10 years ago: Yoooo<br>
-        Member3@9 years ago: Is anyone still here?<br>
-
-    ClanInfo:
-      type: object
-      required:
-        - name
-        - guildMasterUid
-        - memberUids
-        - currentRaidLevel
-      properties:
-        name:
-          type: string
-          example: "Example-Clan"
-        guildMasterUid:
-          type: string
-          example: "012345678901234567890123456789"
-        memberUids:
-          $ref: '#/components/schemas/MemberUids'
-        currentRaidLevel:
-          type: number
-          example: 42
-
-    MemberUids:
-      type: object
-      additionalProperties:
-        type: string
-        enum: ["request", "member"]
-      description: Map of member uids to either "request" or "member".
-      example:
-        "012345678901234567890123456789": "member"
-        "111111111122222222223333333333": "member"
-        "999999999999999999999999999999": "request"
-
-    ClanMembers:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/ClanMember'
-      example:
-        "0":
-          uid: "012345678901234567890123456789"
-          highestZone: "2126"
-          nichname: "Leader of Clans"
-          chosenClass: "2"
-          classLevel: "12"
-          lastRewardTimestamp: "1610841600"
-          lastBonusRewardTimestamp: "1610841600"
-        "1":
-          uid: "111111111122222222223333333333"
-          highestZone: "201"
-          nichname: "A Member :)"
-          chosenClass: "1"
-          classLevel: "2"
-          lastRewardTimestamp: null
-          lastBonusRewardTimestamp: null
-        "2":
-          uid: "999999999999999999999999999999"
-          highestZone: "341"
-          nichname: "Requesti"
-          chosenClass: null
-          classLevel: null
-          lastRewardTimestamp: null
-          lastBonusRewardTimestamp: null
-
-    ClanMember:
-      type: object
-      properties:
-        uid:
-          $ref: '#/components/schemas/Uid'
-        highestZone:
-          $ref: '#/components/schemas/HighestZone'
-        nickname:
-          type: string
-          example: "Bert"
-        chosenClass:
-          $ref: '#/components/schemas/Class'
-        classLevel:
-          type: string
-          nullable: true
-          example: "10"
-        lastRewardTimestamp:
-          type: string
-          nullable: true
-          example: "1610841600"
-        lastBonusRewardTimestamp:
-          type: string
-          nullable: true
-          example: "1610841600"
-
-    Uid:
-      type: string
-      description: A unique identifier
-      minLength: 1
-      maxLength: 32 
-      example: "111112222233333444445555566666"
-
-    HighestZone:
-      type: string
-      description: The highest Zone reached by the member
-      pattern: '^\d+$'
-      example: "2561"
-
-    Class:
-      type: string
-      enum: ["0", "1", "2"]
-      nullable: true
-      description: Enum representation of the class of a player. Can be "0", "1", "2", or null if no class is chosen.
-      example: 1
+    $ref: './paths/guildMessageMonitor.yaml'

@@ -1,0 +1,24 @@
+type: object
+properties:
+  uid:
+    $ref: '../valueObjects/Uid.yaml'
+  highestZone:
+    $ref: '../valueObjects/HighestZone.yaml'
+  nickname:
+    type: string
+    example: "Bert"
+  chosenClass:
+    $ref: '../valueObjects/Class.yaml'
+  classLevel:
+    type: string
+    nullable: true
+    example: "10"
+  lastRewardTimestamp:
+    type: string
+    nullable: true
+    example: "1610841600"
+  lastBonusRewardTimestamp:
+    type: string
+    nullable: true
+    example: "1610841600"
+

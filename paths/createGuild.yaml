@@ -1,0 +1,16 @@
+post:
+  summary: Create a new clan
+  description: >
+    Creates a new clan that the player will be the leader of.
+    Does not work if the clan name already exists or if the player is alredy in a clan.
+  tags: [clan-management]
+  parameters:
+    - $ref: '../params/Id.yaml'
+    - $ref: '../params/Password.yaml'
+    - in: query
+      name: guildName
+      required: true
+      schema:
+        type: string
+      description: The name of the clan that should be created
+

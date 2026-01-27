@@ -1,0 +1,7 @@
+in: query
+name: uid
+required: true
+schema:
+  type: string
+  example: ignored
+description: The unique identifier for a user - can be anything and is ignored by the backend

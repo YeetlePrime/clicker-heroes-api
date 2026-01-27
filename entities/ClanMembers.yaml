@@ -1,0 +1,29 @@
+type: object
+additionalProperties:
+  $ref: './ClanMember.yaml'
+example:
+  "0":
+    uid: "012345678901234567890123456789"
+    highestZone: "2126"
+    nichname: "Leader of Clans"
+    chosenClass: "2"
+    classLevel: "12"
+    lastRewardTimestamp: "1610841600"
+    lastBonusRewardTimestamp: "1610841600"
+  "1":
+    uid: "111111111122222222223333333333"
+    highestZone: "201"
+    nichname: "A Member :)"
+    chosenClass: "1"
+    classLevel: "2"
+    lastRewardTimestamp: null
+    lastBonusRewardTimestamp: null
+  "2":
+    uid: "999999999999999999999999999999"
+    highestZone: "341"
+    nichname: "Requesti"
+    chosenClass: null
+    classLevel: null
+    lastRewardTimestamp: null
+    lastBonusRewardTimestamp: null
+

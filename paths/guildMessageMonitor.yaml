@@ -1,0 +1,26 @@
+get:
+  summary: Retrieves the human-readable form of a clan-chat.
+  description: > 
+    This can be called for any clan.
+    Login is not required.
+    The user in bold is the leader of the clan.
+  tags: [unauthorized, messages]
+  parameters:
+    - in: query
+      name: guildName
+      schema:
+        type: string
+      description: The name of the clan the messages should be retrieved for.
+  responses:
+    "200": # status code
+      content:
+        text/html:
+          schema:
+            oneOf:
+              - type: string
+                description: The messages of a clan in human-readable form. The user in bold is the leader of the clan.
+                example: >
+                  <b>Member1</b>@10 years ago: Hey guys:)<br>
+                  Member2@10 years ago: Yoooo<br>
+                  Member3@9 years ago: Is anyone still here?<br>
+              - $ref: '../responses/Error.yaml'

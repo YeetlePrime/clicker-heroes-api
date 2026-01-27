@@ -1,0 +1,8 @@
+in: query
+name: highestZoneReached
+required: true
+schema:
+  type: number
+  example: 0
+description: The hightest zone the user reached - can be anything and is ignored by the backend
+

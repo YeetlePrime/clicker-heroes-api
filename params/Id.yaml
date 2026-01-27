@@ -1,0 +1,6 @@
+in: query
+name: uid
+required: true
+schema:
+  type: string
+description: The unique identifier for a user

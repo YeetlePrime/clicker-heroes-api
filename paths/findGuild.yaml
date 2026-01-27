@@ -1,0 +1,24 @@
+get:
+  summary: Get information for a clan
+  description: > 
+    Retrieves the information for a specific clan.
+    Login is not required.
+    If no clan name is provided, the information for a random clan is returned.
+  tags: [unauthorized]
+  parameters:
+    - $ref: '../params/UnusedId.yaml'
+    - $ref: '../params/UnusedPassword.yaml'
+    - $ref: '../params/UnusedHighestZone.yaml'
+    - in: query
+      name: guildName
+      schema:
+        type: string
+      description: The name of the clan the info should be retrieved for. Returns a random clan if nothing is provided.
+  responses:
+    "200": # status code
+      content:
+        text/html:
+          schema:
+            oneOf:
+              - $ref: '../responses/Clan.yaml'
+              - $ref: '../responses/Error.yaml'

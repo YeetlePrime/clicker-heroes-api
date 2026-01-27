@@ -1,0 +1,19 @@
+type: object
+required:
+  - name
+  - guildMasterUid
+  - memberUids
+  - currentRaidLevel
+properties:
+  name:
+    type: string
+    example: "Example-Clan"
+  guildMasterUid:
+    type: string
+    example: "012345678901234567890123456789"
+  memberUids:
+    $ref: './MemberUids.yaml'
+  currentRaidLevel:
+    type: number
+    example: 42
+

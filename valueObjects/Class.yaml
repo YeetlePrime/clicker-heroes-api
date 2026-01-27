@@ -1,0 +1,7 @@
+type: string
+enum: ["0", "1", "2"]
+nullable: true
+description: > 
+  Enum representation of the class of a player. 
+  Can be "0", "1", "2", or null if no class is chosen.
+example: 1
