@@ -5,7 +5,9 @@ info:
   version: 0.0.1
 
 tags:
-  - name: clans
+  - name: unauthorized
+    description: Endpoints that are available even when not logged in properly
+  - name: clan-management
     description: Endpoints for retrieving information for clans
   - name: messages
     description: Endpoints for interaction with clan-chat messages
@@ -15,37 +17,14 @@ servers:
     description: Backend API-Server for Clicker Heroes
 
 paths:
-  /clans/getGuildInfo.php:
-    get:
-      summary: Retrieves information for the clan of a logged in user
-      tags: [clans]
-      parameters:
-        - in: query
-          name: uid
-          schema:
-            type: string
-          required: true
-          description: The id of the user
-        - in: query
-          name: passwordHash
-          schema:
-            type: string
-          required: true
-          description: The password hash of the user
-      responses:
-        "200": # status code
-          description: The Reponse-Object containing information of the clan
-          content:
-            text/html:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/ClanResponse'
-                  - $ref: '#/components/schemas/ErrorResponse'
-
   /clans/findGuild.php:
-    get:
-      summary: Returns information for the clan.
-      tags: [clans]
+    post:
+      summary: Get information for a clan
+      description: > 
+        Retrieves the information for a specific clan.
+        Login is not required.
+        If no clan name is provided, the information for a random clan is returned.
+      tags: [unauthorized]
       parameters:
         - $ref: '#/components/parameters/UnusedIdParam'
         - $ref: '#/components/parameters/UnusedPasswordParam'
@@ -64,8 +43,88 @@ paths:
                   - $ref: '#/components/schemas/ClanResponse'
                   - $ref: '#/components/schemas/ErrorResponse'
 
+  /clans/getGuildInfo.php:
+    post:
+      summary: Retrieves information for the clan of a logged in user
+      tags: [clan-management]
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+        - $ref: '#/components/parameters/PasswordParam'
+      responses:
+        "200": # status code
+          description: The Reponse-Object containing information of the clan
+          content:
+            text/html:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ClanResponse'
+                  - $ref: '#/components/schemas/ErrorResponse'
+
+  /clans/createGuild.php:
+    post:
+      summary: Create a new clan
+      description: >
+        Creates a new clan that the player will be the leader of.
+        Does not work if the clan name already exists or if the player is alredy in a clan.
+      tags: [clan-management]
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+        - $ref: '#/components/parameters/PasswordParam'
+        - in: query
+          name: guildName
+          required: true
+          schema:
+            type: string
+          description: The name of the clan that should be created
+
+  /clans/disbandGuild.php:
+    post:
+      summary: Disband an existing clan
+      description: >
+        Disband a clan that the user is the leader of.
+        Does not work if there are other members than just the leader in the clan.
+      tags: [clan-management]
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+        - $ref: '#/components/parameters/PasswordParam'
+        - in: query
+          name: guildName
+          required: true
+          schema:
+            type: string
+          description: The name of the clan that should be disbanded
+
+
+  /clans/kickGuildMember.php:
+    post:
+      summary: Kick a member from a clan
+      description: >
+        Kick a member from a clan that the user is the leader of.
+      tags: [clan-management]
+      parameters:
+        - in: query
+          name: guildMasterUid
+          required: true
+          schema:
+            type: string
+          description: The uid of the clan leader
+        - $ref: '#/components/parameters/PasswordParam'
+        - in: query
+          name: guildName
+          required: true
+          schema:
+            type: string
+          description: The name of the clan the member should be kicked from
+        - in: query
+          name: uidToKick
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the member that should get kicked
+
+
   /clans/guildMessageMonitor.php:
-    get:
+    post:
       summary: Retrieves the human-readable form of a clan-chat.
       description: > 
         This can be called for any clan.
@@ -89,6 +148,20 @@ paths:
 
 components:
   parameters:
+    IdParam:
+      in: query
+      name: uid
+      required: true
+      schema:
+        type: string
+      description: The unique identifier for a user
+    PasswordParam:
+      in: query
+      name: passwordHash
+      required: true
+      schema:
+        type: string
+      description: The password for the user
     UnusedIdParam:
       in: query
       name: uid
