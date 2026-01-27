@@ -1,0 +1,15 @@
+delete:
+  summary: Disband an existing clan
+  description: >
+    Disband a clan that the user is the leader of.
+    Does not work if there are other members than just the leader in the clan.
+  tags: [clan-management]
+  parameters:
+    - $ref: '../params/Id.yaml'
+    - $ref: '../params/Password.yaml'
+    - in: query
+      name: guildName
+      required: true
+      schema:
+        type: string
+      description: The name of the clan that should be disbanded

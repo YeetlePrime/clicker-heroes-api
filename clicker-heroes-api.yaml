@@ -39,49 +39,12 @@ paths:
 
   /clans/createGuild.php:
     $ref: './paths/createGuild.yaml'
+
   /clans/disbandGuild.php:
-    delete:
-      summary: Disband an existing clan
-      description: >
-        Disband a clan that the user is the leader of.
-        Does not work if there are other members than just the leader in the clan.
-      tags: [clan-management]
-      parameters:
-        - $ref: './params/Id.yaml'
-        - $ref: './params/Password.yaml.yaml'
-        - in: query
-          name: guildName
-          required: true
-          schema:
-            type: string
-          description: The name of the clan that should be disbanded
+    $ref: './paths/disbandGuild.yaml'
 
   /clans/kickGuildMember.php:
-    post:
-      summary: Kick a member from a clan
-      description: >
-        Kick a member from a clan that the user is the leader of.
-      tags: [clan-management]
-      parameters:
-        - in: query
-          name: guildMasterUid
-          required: true
-          schema:
-            type: string
-          description: The uid of the clan leader
-        - $ref: './params/Password.yaml'
-        - in: query
-          name: guildName
-          required: true
-          schema:
-            type: string
-          description: The name of the clan the member should be kicked from
-        - in: query
-          name: uidToKick
-          required: true
-          schema:
-            type: string
-          description: Unique identifier of the member that should get kicked
+    $ref: './paths/kickGuildMember.yaml'
 
   /clans/guildMessageMonitor.php:
     $ref: './paths/guildMessageMonitor.yaml'

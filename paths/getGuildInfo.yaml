@@ -1,0 +1,15 @@
+post:
+  summary: Retrieves information for the clan of a logged in user
+  tags: [clan-management]
+  parameters:
+    - $ref: '../params/Id.yaml'
+    - $ref: '../params/Password.yaml'
+  responses:
+    "200":
+      description: The Reponse-Object containing information of the clan
+      content:
+        text/html:
+          schema:
+            oneOf:
+              - $ref: '../responses/Clan.yaml'
+              - $ref: '../responses/Error.yaml'
