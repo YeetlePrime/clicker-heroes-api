@@ -41,6 +41,7 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/ClanResponse'
                   - $ref: '#/components/schemas/ErrorResponse'
+
   /clans/findGuild.php:
     get:
       summary: Returns information for the clan.
@@ -231,7 +232,7 @@ components:
           type: string
           example: "Bert"
         chosenClass:
-          $ref: '#/components/schemas/ChosenClass'
+          $ref: '#/components/schemas/Class'
         classLevel:
           type: string
           nullable: true
@@ -247,17 +248,20 @@ components:
 
     Uid:
       type: string
-      description: Unique identifier
+      description: A unique identifier
+      minLength: 1
+      maxLength: 32 
       example: "111112222233333444445555566666"
 
     HighestZone:
       type: string
       description: The highest Zone reached by the member
+      pattern: '^\d+$'
       example: "2561"
 
-    ChosenClass:
+    Class:
       type: string
       enum: ["0", "1", "2"]
       nullable: true
-      description: The chosen class of the member. Can be "0", "1", "2", or null if no class is chosen."
+      description: Enum representation of the class of a player. Can be "0", "1", "2", or null if no class is chosen.
       example: 1
