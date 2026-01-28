@@ -1,4 +1,4 @@
-post:
+get:
   summary: Retrieves information for the clan of a logged in user
   description: > 
     Also retrieves the information of a clan if there is an open request to join.
