@@ -5,11 +5,12 @@ footer {
   margin-top: 0 !important;
 }
 
+/* Remove topbar from swagger */
+/*
 .swagger-ui {
   margin-top: 0.75rem;
 }
 
-/* Remove topbar from swagger */
 .swagger-ui {
   .topbar {
     display: none;
@@ -19,3 +20,4 @@ footer {
     margin-top: 0;
   }
 }
+*/
