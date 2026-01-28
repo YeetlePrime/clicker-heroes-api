@@ -42,6 +42,7 @@ post:
             already-in-clan:
               description: >
                 The user already is a member of a clan.
+                This is also the case when the user has an open join request for a clan.
               value:
                 success: false
                 reason: User is already in guild 'example-clan'
