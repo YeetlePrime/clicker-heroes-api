@@ -10,7 +10,38 @@ post:
     - in: query
       name: guildName
       required: true
+      minLength: 1
       schema:
         type: string
       description: The name of the clan that should be created
-
+  responses:
+    "200":
+      content:
+        text/html:
+          schema:
+            oneOf:
+              - $ref: '../responses/Success.yaml'
+              - $ref: '../responses/Error.yaml'
+          examples:
+            success:
+              description: The clan was created successfully
+              value:
+                success: true
+            password-mismatch:
+              description: >
+                The passwordHash does not belong the the uid
+              value:
+                success: false
+                reason: Password mismatch.
+            name-exists:
+              description: >
+                A clan with the name already exists
+              value:
+                success: false
+                reason: Sorry! That guild name already exists. Try another one.
+            already-in-clan:
+              description: >
+                The user already is a member of a clan.
+              value:
+                success: false
+                reason: User is already in guild 'example-clan'
