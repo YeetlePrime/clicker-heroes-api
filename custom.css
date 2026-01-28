@@ -1,0 +1,21 @@
+footer {
+  text-align: center;
+  font-size: 0.8rem;
+  padding-top: 2rem;
+  margin-top: 0 !important;
+}
+
+.swagger-ui {
+  margin-top: 0.75rem;
+}
+
+/* Remove topbar from swagger */
+.swagger-ui {
+  .topbar {
+    display: none;
+  }
+
+  .information-container .info {
+    margin-top: 0;
+  }
+}
